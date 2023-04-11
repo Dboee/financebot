@@ -1,16 +1,17 @@
-const { PromptTemplate } = require('langchain');
+import path from 'path';
 
-require('dotenv').config();
+//process.argv returns an array containing command line arguments
+// exampleName is the file path of the example we want to `run`
+const [exampleName, ...args] = process.argv.slice(2);
 
-const run = async () => {
-  const template = 'What language do they spreak in {country}?';
-  const prompt = new PromptTemplate({
-    inputVariables: ['country'],
-    template,
-  });
-  const res = await prompt.format({ country: 'France' });
+console.log(exampleName, ...args);
 
-  console.log(res);
-};
+let runExample;
 
-run();
+try {
+  ({ run: runExample } = require(path.join(__dirname, exampleName)));
+} catch {
+  throw new Error(`Could not load example ${exampleName}`);
+}
+
+runExample();
