@@ -1,22 +1,35 @@
-// import { OpenAI } from 'langchain';
-// import { initializeAgentExecutor } from 'langchain/agents';
-// import { SerpAPI, Calculator, ConversationChain } from 'langchain/tools';
+const { OpenAI } = require('langchain');
+const { initializeAgentExecutor } = require('langchain/agents');
+const { loadQAStuffChain, loadQAMapReduceChain } = require('langchain/chains');
+const { SerpAPI, Calculator, ConversationChain } = require('langchain/tools');
+const { Document } = require('langchain/document');
 
-// require('dotenv').config();
+require('dotenv').config();
 
-// const model = new OpenAI({ temperature: 0 });
-// const tools = [new SerpAPI(), new Calculator(), new ConversationChain()];
+const Querytext = 'What school did Ford go to?';
 
-// const executor = await initializeAgentExecutor(
-//   tools,
-//   model,
-//   'zero-shot-react-description'
-// );
-// console.log('Loaded agent.');
+const run = async (Querytext: string) => {
+  console.log('run started');
+  // instantiate the languagemodel
+  const languagemodel = await new OpenAI({ temperature: 0.2, cache: true });
 
-// const input = 'Hello, how can I help you today?';
-// console.log(`Executing with input "${input}"...`);
+  // initialize the chain
+  const chainA = loadQAStuffChain(languagemodel);
 
-// const result = await executor.call({ input });
+  // initialize the reference documents
+  const docs = [
+    new Document({ pageContent: 'Harrison went to Harvard.' }),
+    new Document({ pageContent: 'Ford went to Yale.' }),
+  ];
 
-// console.log(`Got output ${result.output}`);
+  const responseA = await chainA.call({
+    input_documents: docs,
+    question: Querytext,
+  });
+
+  console.log(responseA);
+
+  console.log('run ended');
+};
+
+run(Querytext);
