@@ -7,7 +7,7 @@ import { DirectoryLoader } from 'langchain/document_loaders';
 import { PINECONE_INDEX_NAME, PINECONE_NAME_SPACE } from '@/config/pinecone';
 
 /* Name of directory to retrieve your files from */
-const filePath = 'businessBooks';
+const filePath = 'docs';
 
 export const run = async () => {
   try {
