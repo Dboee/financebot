@@ -8,6 +8,7 @@
     "start_old": "tsx -r dotenv/config src/index.ts",
     "start": "node src/bookReader.cjs",
     "start:dist": "npm build && node -r dotenv/config dist/index.js",
+    "ingest": "tsx -r dotenv/config scripts/ingest-PDF.ts",
     "lint": "eslint src",
     "lint:fix": "npm lint --fix"
   },
